@@ -35,7 +35,7 @@ def calculate_subject_metrics(grade_records)
             subject_stats[subject]["max_score"] = score
         if score < subject_stats[subject]["min_score"]:
             subject_stats[subject]["min_score"] = score
-        if score>60:
+        if score>=60:
             subject_stats[subject]["passed_count"] += 1
     final_res={}
     for subject, stats in subject_stats.items():
@@ -43,6 +43,21 @@ def calculate_subject_metrics(grade_records)
             "avg": stats["total_score"]/stats["count"],
             "min": stats["min_score"],
             "max": stats["max_score"],
-            "pass_rate": stats["passed_count"]/stats["count"]*100
+            "pass_rate": stats["passed_count"]/stats["count"]
         }
     return final_res
+
+def calculate_student_total_scores(students_db, grade_records):
+    student_scores=[]
+    for student in students_db:
+        std_id= student["student id"]
+        std_name= student["student name"]
+        total_score=0
+        for record in grade_records:
+            if record["student id"]==std_id:
+                total_score += record["score"]
+        student_scores.append({
+            "id": std_id,
+            "name": std_name,
+            "total score": total_score
+        })
